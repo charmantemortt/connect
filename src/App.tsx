@@ -27,24 +27,25 @@ function App() {
   }
 
   function getTrustWalletFromWindow() {
-    const isTrustWallet = (ethereum) => {
+    const isTrustWallet = (ethereum?: IEthereum) => {
       // Identify if Trust Wallet injected provider is present.
-      const trustWallet = !!ethereum.isTrust;
+      const trustWallet = !!ethereum?.isTrust;
   
       return trustWallet;
     };
+
+    
   
     const injectedProviderExist =
       typeof window !== "undefined" && typeof window.ethereum !== "undefined";
-  
     if (!injectedProviderExist) {
       return null;
     }
-  
+
     if (isTrustWallet(window.ethereum)) {
       return window.ethereum;
     }
-  
+
     if (window.ethereum?.providers)
       return window.ethereum.providers.find(isTrustWallet) ?? null;
 
@@ -63,7 +64,7 @@ function App() {
       window.addEventListener("trustwallet#initialized", handleInitialization, {
         once: true,
       });
-  
+
       setTimeout(() => {
         window.removeEventListener(
           "trustwallet#initialized",
@@ -98,6 +99,8 @@ function App() {
       ARBUZ,
       signer
     );
+
+    
 
     const carinfo = await contract.carinfo();
     console.log(carinfo);
